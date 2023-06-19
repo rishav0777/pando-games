@@ -7,16 +7,34 @@ using UnityEngine.Networking;
 public class TransactionService : MonoBehaviour
 {
     // Start is called before the first frame update
-    // [SerializeField] private GameObject loginPage;
+    [SerializeField] private GameObject referal;
+    [SerializeField] private GameObject register;
     [SerializeField] private TMP_InputField senderAddress;
     [SerializeField] private TMP_InputField privatekey;
     [SerializeField] private GenerateRtId rtId;
 
+    [SerializeField] private walletIdKey wallet;
+
 
     private string url = "https://Testnet.rtservices.pandoproject.org/apis/rtMobileTransaction";
     
+
+    public void SwitchToReferal()
+    {
+        register.SetActive(false);
+        referal.SetActive(true);
+    }
+
+
+
+
+
     private void Start()
     {
+        if (wallet.GetWalletId()!=null)
+        {
+            SwitchToReferal();
+        }
         Register();
     }
 
@@ -25,9 +43,13 @@ public class TransactionService : MonoBehaviour
 
     public void Register()
     {
+
+     
         string _senderaddress = senderAddress.text;
         string _privatekey = privatekey.text;
         string rtid = rtId.GetRtId();
+
+        wallet.SetWalletId(_senderaddress);
 
         StartCoroutine(Registrations(_senderaddress,_privatekey,rtid));
     }
@@ -40,7 +62,7 @@ public class TransactionService : MonoBehaviour
         wWForm.AddField("rtId", rtid);
         using (UnityWebRequest request = UnityWebRequest.Post(url, wWForm))
         {
-
+            request.SetRequestHeader("Authorization", "Bearer " + wallet.GetToken());
             yield return request.SendWebRequest();
             var response = request.result;
 

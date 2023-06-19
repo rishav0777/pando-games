@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.Android;
-using UnityEngine.iOS;
+
 
 public class LocationService : MonoBehaviour
 {

@@ -5365,13 +5365,15 @@ GameObject:
   - component: {fileID: 1919824930}
   - component: {fileID: 1919824929}
   - component: {fileID: 1919824931}
+  - component: {fileID: 1919824933}
+  - component: {fileID: 1919824932}
   m_Layer: 5
   m_Name: Referral
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1919824927
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5445,6 +5447,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ui: []
   _sceneIndex: 2
+--- !u!114 &1919824932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919824926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f6c5fd5b79bc604ab0ca0f67ae23f6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1919824933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919824926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8000453e7fcf674681e3f04cf43f27c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rtId: {fileID: 1919824932}
+  referalUrl: {fileID: 886198901}
 --- !u!1 &2038777760
 GameObject:
   m_ObjectHideFlags: 0
@@ -7085,7 +7113,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6691672782924005809
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7918,6 +7946,7 @@ GameObject:
   - component: {fileID: 6691672783921418960}
   - component: {fileID: 6691672783921418962}
   - component: {fileID: 6691672783921418961}
+  - component: {fileID: 6691672783921418963}
   m_Layer: 5
   m_Name: Canvas_1
   m_TagString: Untagged
@@ -8001,9 +8030,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aea20a6e29fe034ba99d097380d80d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  referal: {fileID: 1919824926}
+  register: {fileID: 6691672782924005808}
   senderAddress: {fileID: 1617850490}
   privatekey: {fileID: 5041837363096354393}
   rtId: {fileID: 6691672783921418960}
+  wallet: {fileID: 6691672783921418963}
+--- !u!114 &6691672783921418963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6691672783921418957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5665fa39945ee6346b6c4f38981267d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &6691672784019806800
 CanvasRenderer:
   m_ObjectHideFlags: 0

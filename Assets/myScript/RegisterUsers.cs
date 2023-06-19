@@ -12,17 +12,44 @@ public class RegisterUsers : MonoBehaviour
     //[SerializeField] private TMP_InputField username;
     //[SerializeField] private TMP_InputField password;
     [SerializeField] private GenerateRtId rtId;
+   
+    private string Token;
     
 
     private string url = "https://Testnet.rtservices.pandoproject.org/apis/RT_userRegistartion";
     private string Rurl = "https://Testnet.rtservices.pandoproject.org/apis/rtMobileCreateRt";
 
+    
+    public class MyData
+    {
+        public string message;
+        public string token;
+    }
+
+    public class verificationResponse
+    {
+        public string message;
+        public string walletId;
+        public int status;
+    }
+
+    string _walletId;
+    [SerializeField] private walletIdKey wallet;
+
+    
+
+  
+
+
+
+
+
+
+
     private void Start()
     {
         Register();
     }
-
-
 
 
     public void Register()
@@ -87,7 +114,11 @@ public class RegisterUsers : MonoBehaviour
             else if (request.result == UnityWebRequest.Result.Success)
             {
                 print("Successfully Login");
-                CreateVerify();
+                string jason = request.downloadHandler.text;
+                MyData data = JsonUtility.FromJson<MyData>(jason);
+                Token = data.token;
+                wallet.SetToken(Token);
+                CreateVerify(Token);
             }
         }
     }
@@ -102,14 +133,14 @@ public class RegisterUsers : MonoBehaviour
 
 
 
-    public void CreateVerify()
+    public void CreateVerify(string token)
     {
         print("verifying");
         string _rtId = rtId.GetRtId();
-        StartCoroutine(Verifications(_rtId));
+        StartCoroutine(Verifications(_rtId,token));
     }
 
-    IEnumerator Verifications(string _rtId)
+    IEnumerator Verifications(string _rtId,string token)
     {
         WWWForm wWForm = new WWWForm();
 
@@ -119,10 +150,10 @@ public class RegisterUsers : MonoBehaviour
         wWForm.AddField("latitude","8.888888");
         wWForm.AddField("longitude","88.99");
         wWForm.AddField("rtType","rtMobile");
-        wWForm.AddField("created","true");
+        wWForm.AddField("created", "true");
         wWForm.AddField("walletId", null);
-        wWForm.AddField("allFreeMemory","854.6640625");
-        wWForm.AddField("availableRam","7926.78125");
+        wWForm.AddField("allFreeMemory", (int)854.6640625);
+        wWForm.AddField("availableRam", (int)7926.78125);
         wWForm.AddField("core",4);
         wWForm.AddField("cpu","11th Gen Intel(R) Core(TM)i3-1115G4 @ 3.00GHz");
         wWForm.AddField("osPlateform","Android 12,MIUI 14");
@@ -135,79 +166,23 @@ public class RegisterUsers : MonoBehaviour
 
         using (UnityWebRequest request = UnityWebRequest.Post(Rurl, wWForm))
         {
-
+            request.SetRequestHeader("Authorization", "Bearer " + token);
             yield return request.SendWebRequest();
             print(request.result);
             if (request.result != UnityWebRequest.Result.Success) Debug.Log(request.error);
             else if (request.result == UnityWebRequest.Result.Success)
             {
                 print("Successfully created and verified");
-
+                string response = request.downloadHandler.text;
+                verificationResponse data = JsonUtility.FromJson<verificationResponse>(response);
+                _walletId = data.walletId;
+                wallet.SetWalletId(_walletId);
             }
         }
     }
 
 
-    /*   public void PostRtID()
-       {
-           StartCoroutine(createandverifyrtid());
-       }
-
-       IEnumerator createandverifyrtid()
-       {
-           WWWForm wWForm = new WWWForm();
-           wWForm.AddField("rtId", rtId.GetRtId());
-           using (UnityWebRequest request = UnityWebRequest.Post(walletid, wWForm))
-           {
-
-               yield return request.SendWebRequest();
-               if (request.result != UnityWebRequest.Result.Success) Debug.Log(request.error);
-               else if (request.result == UnityWebRequest.Result.Success)
-               {
-                   print("Successfully create and verified rtid");
-                   getRtID();
-
-               }
-           }
-       }
-
-
-
-
-
-
-       public void getRtID()
-       {
-           StartCoroutine(getReferal());
-       }
-
-
-       IEnumerator getReferal()
-       {
-           using (UnityWebRequest webRequest = UnityWebRequest.Get(walletid))
-           {
-               // Request and wait for the desired page.
-               yield return webRequest.SendWebRequest();
-
-               string[] pages = walletid.Split('/');
-               int page = pages.Length - 1;
-
-               switch (webRequest.result)
-               {
-                   case UnityWebRequest.Result.ConnectionError:
-                   case UnityWebRequest.Result.DataProcessingError:
-                       Debug.LogError(pages[page] + ": Error: " + webRequest.error);
-                       break;
-                   case UnityWebRequest.Result.ProtocolError:
-                       print(pages[page]);
-                       //Debug.LogError(pages[page]) + ": HTTP Error: " + webRequest.error);
-                       break;
-                   case UnityWebRequest.Result.Success:
-                       Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-                       break;
-               }
-           }
-       }*/
+    
 
 
 
